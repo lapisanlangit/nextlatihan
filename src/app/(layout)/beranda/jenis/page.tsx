@@ -2,7 +2,7 @@
 
 import { Jns } from "@/_models/referensi";
 import { deleteJns, getJns, saveJns, updateJns } from "@/_service/jenis";
-import { useEffect, useState } from "react";
+import { useDeferredValue, useEffect, useMemo, useState } from "react";
 
 export default function Jenis() {
   const [listJns, setJns] = useState<Jns | null>(null);
@@ -12,6 +12,7 @@ export default function Jenis() {
   const [isReadOnly, setIsReadOnly] = useState(true);
   const [formkdjns, setFormkdjns] = useState("");
   const [formnmjns, setFormnmjns] = useState("");
+  const [search, setSearch] = useState("");
 
   const handleclear = () => {
     setIsEditing(false);
@@ -107,12 +108,24 @@ export default function Jenis() {
     document.getElementById("nmjns")!.focus(); // TS error gone, but risky
   };
 
+  // Deferred value = smooth typing (no lag even with 10k items)
+  const deferredSearch = useDeferredValue(search.toLowerCase());
+
+  // Filter logic - only kdjns & nmjns
+  const filteredData = useMemo(() => {
+    if (!listJns?.data || !deferredSearch) return listJns?.data || [];
+
+    return listJns.data.filter(
+      (item) =>
+        item.kdjns.toLowerCase().includes(deferredSearch) ||
+        item.nmjns.toLowerCase().includes(deferredSearch),
+    );
+  }, [listJns?.data, deferredSearch]);
+
   if (loading) return <div>Loading Jns...</div>;
   if (error) return <div>Error: {error}</div>;
-  if (!listJns) return <p>No data</p>;
-
-  // Safely access the array inside jns.data
-  const items = listJns.data; // fallback to empty array
+  if (!listJns?.data) return <p>No data</p>;
+  //  const items = listJns.data;
   return (
     <>
       <button onClick={() => handleAdd()}>Add</button>
@@ -151,9 +164,15 @@ export default function Jenis() {
           <input type="submit" name="submit" value="Create" />
         )}
       </form>
-
+      <br />
+      <input
+        type="text"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        placeholder="Search"
+      />
       <ul className="space-y-2">
-        {items.map((item: any) => (
+        {filteredData.map((item: any) => (
           <li
             key={item.kdjns} // ← ALWAYS use unique key (id, kode, etc.)
           >

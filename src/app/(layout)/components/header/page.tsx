@@ -13,6 +13,10 @@ export default function Header() {
             <Link href="/beranda/jenis">Jenis</Link>
           </li>
           <li>
+            <Link href="/beranda/tesredux">Tes Redux</Link>
+          </li>
+
+          <li>
             <Link href="/beranda/lainnya">Lainnya</Link>
           </li>
         </ul>
