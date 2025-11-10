@@ -5,5 +5,6 @@ export interface Jns {
   data: Array<{
     kdjns: string;
     nmjns: string;
+    uang: number;
   }>;
 }

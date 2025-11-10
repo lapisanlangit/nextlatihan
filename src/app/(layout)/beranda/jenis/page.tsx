@@ -112,6 +112,8 @@ export default function Jenis() {
   const deferredSearch = useDeferredValue(search.toLowerCase());
 
   // Filter logic - only kdjns & nmjns
+  console.log(listJns);
+  const formatter = new Intl.NumberFormat("de-DE");
   const filteredData = useMemo(() => {
     if (!listJns?.data || !deferredSearch) return listJns?.data || [];
 
@@ -176,7 +178,8 @@ export default function Jenis() {
           <li
             key={item.kdjns} // ← ALWAYS use unique key (id, kode, etc.)
           >
-            <strong>{item.kdjns}</strong> - {item.nmjns}
+            <strong>{item.kdjns}</strong> - {item.nmjns} -{" "}
+            {formatter.format(item.uang)}
             <button onClick={() => handleEdit(item)}>U</button>
             <button onClick={() => handleDelete(item.kdjns)}>X</button>
           </li>
