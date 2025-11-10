@@ -1,9 +1,10 @@
 "use client";
 
+import { formatDate, formatNumber } from "@/_libs/fungsi";
 import { Jns } from "@/_models/referensi";
 import { deleteJns, getJns, saveJns, updateJns } from "@/_service/jenis";
 import { useDeferredValue, useEffect, useMemo, useState } from "react";
-
+//import { format } from "date-fns";
 export default function Jenis() {
   const [listJns, setJns] = useState<Jns | null>(null);
   const [loading, setLoading] = useState(true);
@@ -112,8 +113,8 @@ export default function Jenis() {
   const deferredSearch = useDeferredValue(search.toLowerCase());
 
   // Filter logic - only kdjns & nmjns
-  console.log(listJns);
-  const formatter = new Intl.NumberFormat("de-DE");
+  //const formatter = new Intl.NumberFormat("de-DE");
+
   const filteredData = useMemo(() => {
     if (!listJns?.data || !deferredSearch) return listJns?.data || [];
 
@@ -127,7 +128,7 @@ export default function Jenis() {
   if (loading) return <div>Loading Jns...</div>;
   if (error) return <div>Error: {error}</div>;
   if (!listJns?.data) return <p>No data</p>;
-  //  const items = listJns.data;
+  console.log(listJns.data);
   return (
     <>
       <button onClick={() => handleAdd()}>Add</button>
@@ -179,7 +180,7 @@ export default function Jenis() {
             key={item.kdjns} // ← ALWAYS use unique key (id, kode, etc.)
           >
             <strong>{item.kdjns}</strong> - {item.nmjns} -{" "}
-            {formatter.format(item.uang)}
+            {formatNumber().format(item.uang)} {formatDate(item.tgl)}
             <button onClick={() => handleEdit(item)}>U</button>
             <button onClick={() => handleDelete(item.kdjns)}>X</button>
           </li>
