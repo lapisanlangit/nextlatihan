@@ -1,11 +1,13 @@
 // services/referensi.ts (or wherever you keep it)
 
 import { Jns } from "@/_models/referensi";
-
+import Cookies from "js-cookie";
 export const getJns = async (data: Record<string, any> = {}): Promise<Jns> => {
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
   const url = `${apiurl}/referensi/getJns`;
-  const token = localStorage.getItem("token");
+
+  const token = Cookies.get("token");
+  //  const token = localStorage.getItem("token");
   const response = await fetch(url, {
     method: "GET",
     headers: {

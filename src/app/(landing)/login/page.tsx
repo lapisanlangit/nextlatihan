@@ -2,10 +2,16 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { login } from "@/_service/auth";
+//import { login } from "@/_service/auth";
+import Cookies from "js-cookie";
+import { useAuth } from "@/app/context/AuthContext";
+
 export default function Login() {
   const [inputs, setInputs] = useState({ userid: "", password: "" });
   const router = useRouter();
+
+  const { login } = useAuth();
+
   const handleChange = (event: any) => {
     const name = event.target.name;
     const value = event.target.value;
@@ -16,10 +22,8 @@ export default function Login() {
     event.preventDefault();
     try {
       const result = await login(inputs);
-      localStorage.setItem("token", result.data[0].token);
-      router.push("/beranda");
     } catch (error: any) {
-      console.log(error);
+      //      console.log(error);
     } finally {
     }
   };
@@ -51,7 +55,7 @@ export default function Login() {
           />
         </label>
         <br />
-        <input type="submit" />
+        <input type="submit" value="Login" />
       </form>
       {/* <button onClick={handleClear}>Kosongkan </button> */}
     </div>
